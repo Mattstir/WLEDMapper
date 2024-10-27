@@ -1,3 +1,29 @@
-.App {
+.Header {
     font-size: 2rem;
+    background-color: var(--dark-bg);
+    color: var(--whiteish);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.Footer {
+    background-color: var(--dark-bg);
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    color: var(--whiteish);
+}
+
+.Footer > a {
+    margin-left: 0.3rem;
+    color: var(--whiteish);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.githubMarker {
+    height: 1.5rem;
 }
