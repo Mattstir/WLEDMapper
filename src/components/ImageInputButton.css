@@ -1,0 +1,24 @@
+#fileInput {
+    display: none;
+}
+
+.fileUploadButton {
+    background-color: var(--pink);
+    padding: 1rem 3rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    user-select: none;
+}
+
+.fileUploadButton:hover {
+    background-color: var(--pink-dark);
+  }
+
+.ButtonParent { 
+    height: 3rem;
+    display: flex;
+    align-items: center;
+}

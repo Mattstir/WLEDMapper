@@ -1,0 +1,39 @@
+.gridPointCentering {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.baseGridPoint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    background-color: rgba(255, 255, 255, .2);
+}
+
+.ledGridPoint {
+    border-color: var(--pink) !important;
+    color: var(--whiteish);
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.rowParent {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+}
+
+.columParent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: -webkit-fill-available;
+    align-items: center;
+}

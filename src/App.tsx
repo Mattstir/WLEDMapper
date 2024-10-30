@@ -1,20 +1,30 @@
 import './App.css';
-import LedMapper from './components/LedMapper';
+import LedMapperParent from './components/LedMapperParent';
 import githubMarker from "./svg/github-mark-white.svg";
+import heartSVG from "./svg/heart.svg"
 
 function App() {
   return (
     <div className="App">
         <div className="Header">
-            <div className="toolName">WLEDMapper</div>
+            <div className="toolName">WLEDMapper - DON'T use, this tool is WIP</div>
             <a href="https://github.com/Mattstir/WLEDMapper">
                 <img className="githubMarker" src={githubMarker} alt="Go to repository" />
             </a>
         </div>
-        <LedMapper/>
+        <LedMapperParent/>
         <div className="Footer">
-            Made with Love for WLED by
-            <a href="https://github.com/Mattstir">Mattstir</a>
+            <div>
+                Made with
+                <img className="heartSvg" src={heartSVG} alt="heart"/>
+                for WLED by
+                <a className="FooterLineLink" href="https://github.com/Mattstir">Mattstir</a>
+            </div>
+            <div className="FooterLineSpacer"/>
+            <div>
+                Icons by
+                <a className="FooterLineLink" href="https://fonts.google.com/icons">Google Fonts</a>
+            </div>
         </div>
     </div>
   );

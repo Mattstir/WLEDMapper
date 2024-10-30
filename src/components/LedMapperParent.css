@@ -1,0 +1,4 @@
+.parentMapper {
+    color: var(--whiteish);
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 2 * var(--header-padding));
+}

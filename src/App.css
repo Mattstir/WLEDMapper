@@ -4,26 +4,40 @@
     color: var(--whiteish);
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: var(--header-padding);
+    height: var(--header-height);
+    align-items: center;
 }
 
 .Footer {
     background-color: var(--dark-bg);
     text-align: center;
-    padding: 10px;
-    position: relative;
-    bottom: 0;
     width: 100%;
     color: var(--whiteish);
-}
-
-.Footer > a {
-    margin-left: 0.3rem;
-    color: var(--whiteish);
-    text-decoration: none;
-    font-weight: 500;
+    height: var(--footer-height);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .githubMarker {
     height: 1.5rem;
+}
+
+.heartSvg {
+    height: 1rem;
+    margin: 0 0.3rem;
+}
+
+.FooterLineSpacer {
+    width: 10px;
+    height: 1rem;
+}
+
+.FooterLineLink  {
+    margin-left: 0.3rem;
+    color: var(--whiteish);
+    text-decoration: none;
+    font-weight: 500;
 }
