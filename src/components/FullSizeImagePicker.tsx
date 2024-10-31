@@ -4,6 +4,7 @@ import ImageInputButton from "./ImageInputButton";
 import uploadCloudSVG from "../svg/upload-cloud-icon.svg";
 import "./FullSizeImagePicker.css";
 import { readFileAsUrl } from "../utils/read-file-as-url";
+import { avoidImageDragging } from "../utils/avoid-image-drag";
 
 interface FullSizeImagePickerParams {
     setImage: React.Dispatch<React.SetStateAction<string | IMAGE_STATE>>
@@ -43,10 +44,7 @@ function FullSizeImagePicker({setImage}: FullSizeImagePickerParams): ReactElemen
         setImage(IMAGE_STATE.DONT_USE);
     }, [setImage]);
 
-    const onCloudIconDragStart = useCallback((e: DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        return false;
-    }, []);
+    
 
     return <div className="fullsizeImagePickerParent">
         <div className="midField">
@@ -63,7 +61,7 @@ function FullSizeImagePicker({setImage}: FullSizeImagePickerParams): ReactElemen
                         className="cloudSVG" 
                         src={uploadCloudSVG} 
                         alt="Upload Icon"
-                        onDragStart={onCloudIconDragStart}
+                        onDragStart={avoidImageDragging}
                     />
                     Drop an image here
                 </div>
