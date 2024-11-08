@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IMAGE_STATE } from "../types/imageState";
 import "./LedMapper.css";
 import { Grid } from "../types/grid";
@@ -10,6 +10,7 @@ import VerticalDivider from "./VerticalDivider";
 import copySVG from "../svg/copy.svg";
 import saveFileSVG from "../svg/save-file.svg";
 import { generateMapFromGrid } from "../utils/generate-map-from-grid";
+import { copyToClipboard } from "../utils/copyToClipboard";
 
 interface LedMapperParams {
     image: string | IMAGE_STATE;
@@ -85,6 +86,25 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
         });
     }, [image]);
 
+    const [setLEDInfo, detailedLEDInfo] = useMemo((): [string, string] => {
+        const setLedNums = extractLedNums([...gridData]);
+        let info = `(${setLedNums.length}/${realLedCount})`;
+        let detailedInfo = generateMissingLedInfo(realLedCount, setLedNums);
+        if (setLedNums.length === realLedCount) {
+            info = "All Set!";
+            detailedInfo = "All LEDS are set, you can use the map now!";
+        }
+        return [info, detailedInfo];
+    }, [gridData]);
+
+    const copyMapToClipboard = useCallback(() => {
+        copyToClipboard(generatedMap);
+    }, [generatedMap]);
+
+    const downloadLedMapFile = useCallback(() => {
+        // TODO
+    }, [generatedMap]);
+
     const gridHasMarkedLeds = gridData.some((row) => row.some(elem => elem.value !== void 0));
     const rowsORCallWarning = gridHasMarkedLeds ? "Caution: Changing size wipes the LED grid!" : "";
 
@@ -122,6 +142,12 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     max={realLedCountReduced}
                     guide="Step 4: Set LEDs on Matrix by clicking pixels"
                 />
+                <div 
+                    className="setInfo"
+                    title={detailedLEDInfo}
+                >
+                    {setLEDInfo}
+                </div>
             </div>
         </div>
         <div 
@@ -154,17 +180,21 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                 className="mapOutputInputfield"
                 value={generatedMap}
             />
+            <VerticalDivider />
             <img 
                 className="copyIcon"
                 src={copySVG} 
                 alt="Copy LED to clipboard"
                 title="Copy WLED ledmap to clipboard"
+                onClick={copyMapToClipboard}
             />
+            <VerticalDivider />
             <img 
                 className="copyIcon"
                 src={saveFileSVG} 
                 alt="Save ledmap.json"
                 title="Download WLED ledmap.json file"
+                onClick={downloadLedMapFile}
             />
         </div>
     </div>;
@@ -181,4 +211,25 @@ function getContainedSize(img: HTMLImageElement): [number, number] {
         height = img.width/ratio
     }
     return [width, height]
+}
+
+function extractLedNums(grid: Grid): number[] {
+    const alreadySetNums: number[] = (
+        grid
+            .map((row) => row.map((point) => point.value))
+            .flat()
+            .filter((ledNum: number | undefined) => ledNum !== void 0)
+    //not sure why Ts doesn't get that this is number[], therfore cast it
+    ) as number[];
+    return alreadySetNums;
+}
+
+function generateMissingLedInfo(realLedCount: number, setLedNums: number[]): string {
+    let missingLedNums = [];
+    for (let i = 0; i < realLedCount; i++) {
+        if (!setLedNums.includes(i)) {
+            missingLedNums.push(i);
+        }
+    }
+    return `Please set the following LED Numbers: [${missingLedNums.join(", ")}]`;
 }

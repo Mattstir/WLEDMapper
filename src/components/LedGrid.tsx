@@ -27,10 +27,12 @@ function LedGrid({grid, setGrid, height, width, ledNumToSet, setLedNumToSet}: Le
 
     const clickedOnLED: (rowIndex: number, columnIndex: number) => EventHandler<MouseEvent<HTMLDivElement>> = (rowIndex: number, columnIndex: number) => {
         return (e: MouseEvent<HTMLDivElement>) => {
+            const oldValue = grid[rowIndex][columnIndex].value;
             // 1. check if somewherelse in the matrix the led NUM is already set and delete it
             const cleanedGrid = removeLedNumFromGrid([...grid], ledNumToSet);
             // 2. set the ledNum to the grid and set the grid
-            cleanedGrid[rowIndex][columnIndex].value = ledNumToSet;
+            // if the value is the same num as already set remove it
+            cleanedGrid[rowIndex][columnIndex].value = oldValue === ledNumToSet ? void 0 : ledNumToSet;
             setGrid(cleanedGrid);
             // 3. increment the LEDcount to set
             setLedNumToSet(ledNumToSet + 1);
