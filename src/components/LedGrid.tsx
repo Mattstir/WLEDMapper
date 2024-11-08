@@ -1,15 +1,17 @@
-import { CSSProperties, ReactElement, useMemo, useRef } from "react";
+import { ChangeEvent, CSSProperties, EventHandler, MouseEvent, ReactElement, useMemo, useRef } from "react";
 import "./LedGrid.css";
 import { Grid } from "../types/grid";
 
 interface LedGridParams {
     grid: Grid;
     setGrid: React.Dispatch<React.SetStateAction<Grid>>;
+    ledNumToSet: number;
+    setLedNumToSet: (newVal: number) => void;
     width: number;
     height: number;
 }
 
-function LedGrid({grid, setGrid, height, width}: LedGridParams): ReactElement {
+function LedGrid({grid, setGrid, height, width, ledNumToSet, setLedNumToSet}: LedGridParams): ReactElement {
     const ledWidthAndHeight = useMemo(() => {
         if(!width || !height) {
             return [1, 1];
@@ -22,6 +24,18 @@ function LedGrid({grid, setGrid, height, width}: LedGridParams): ReactElement {
             Math.floor(height /  rowCount / 2)
         ];
     }, [height, width, grid]);
+
+    const clickedOnLED: (rowIndex: number, columnIndex: number) => EventHandler<MouseEvent<HTMLDivElement>> = (rowIndex: number, columnIndex: number) => {
+        return (e: MouseEvent<HTMLDivElement>) => {
+            // 1. check if somewherelse in the matrix the led NUM is already set and delete it
+            const cleanedGrid = removeLedNumFromGrid([...grid], ledNumToSet);
+            // 2. set the ledNum to the grid and set the grid
+            cleanedGrid[rowIndex][columnIndex].value = ledNumToSet;
+            setGrid(cleanedGrid);
+            // 3. increment the LEDcount to set
+            setLedNumToSet(ledNumToSet + 1);
+        };
+    };
     
 
     return <div className="rowParent">
@@ -40,7 +54,10 @@ function LedGrid({grid, setGrid, height, width}: LedGridParams): ReactElement {
                         fontSize: `${ledWidthAndHeight[1] / 2}px`
                     };
                     return <div className="gridPointCentering"key={"r" + rowIndex + "c" + columnIndex}>
-                        <div className={classes} style={style}>
+                        <div 
+                            className={classes} 
+                            style={style}
+                            onClick={clickedOnLED(rowIndex, columnIndex)}>
                             {value}
                         </div>
                     </div>;
@@ -51,3 +68,18 @@ function LedGrid({grid, setGrid, height, width}: LedGridParams): ReactElement {
 }
   
 export default LedGrid;
+
+function removeLedNumFromGrid(grid: Grid, numToRemove: number): Grid {
+    return grid.map((row) => {
+        return row.map((point) => {
+            // clear the num from the Grid
+            if (point.value === numToRemove) {
+                return {
+                    value: void 0
+                }
+            } else {
+                return point;
+            }
+        });
+    });
+}

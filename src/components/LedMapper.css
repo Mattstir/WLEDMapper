@@ -39,3 +39,7 @@
 .toolbarGuidePlaceholder {
     height: 2rem;
 }
+
+.copyIcon {
+    cursor: pointer;
+}

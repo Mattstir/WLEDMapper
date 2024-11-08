@@ -10,9 +10,11 @@ interface NumberInputParams {
     labelName: string;
     guide: string;
     warning?: string;
+    hidePlusMinus?: boolean;
+    max?: number;
 }
 
-function NumberInput({stateValue, setStateValue, labelName, guide, warning}: NumberInputParams): ReactElement {
+function NumberInput({stateValue, setStateValue, labelName, guide, warning, hidePlusMinus, max}: NumberInputParams): ReactElement {
     const [shouldShowWarning, setShouldShowWarning] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const wholeNumberInputRef = useRef<HTMLDivElement>(null);
@@ -27,8 +29,8 @@ function NumberInput({stateValue, setStateValue, labelName, guide, warning}: Num
         if (parsedNum % 1 !== 0) {
             return;
         }
-        setStateValue(Math.min(Math.max(parsedNum, 0), 100_000));
-    }, [setStateValue]);
+        setStateValue(Math.min(Math.max(parsedNum, 0), max || 100_000));
+    }, [setStateValue, max]);
 
     const increase = () => {
         setStateValue(Math.min(stateValue + 1, 100_000));
@@ -73,20 +75,24 @@ function NumberInput({stateValue, setStateValue, labelName, guide, warning}: Num
             value={stateValue}
             onChange={changeValue}
         />
-        <div className="numberInputIconParent" onClick={decrease}>
-            <img 
-                src={minusSVG} 
-                alt="" 
-                onDragStart={avoidImageDragging}
-            />
-        </div>
-        <div className="numberInputIconParent" onClick={increase}>
-            <img 
-                src={plusSVG} 
-                alt="" 
-                onDragStart={avoidImageDragging}
-            />
-        </div>
+        {
+            !hidePlusMinus && <div className="numberInputIconParent" onClick={decrease}>
+                <img 
+                    src={minusSVG} 
+                    alt="" 
+                    onDragStart={avoidImageDragging}
+                />
+            </div>
+        }   
+        {
+            !hidePlusMinus && <div className="numberInputIconParent" onClick={increase}>
+                <img 
+                    src={plusSVG} 
+                    alt="" 
+                    onDragStart={avoidImageDragging}
+                />
+            </div>
+        }    
     </div>
 }
 

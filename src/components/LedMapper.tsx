@@ -6,6 +6,10 @@ import LedGrid from "./LedGrid";
 import NumberInput from "./NumberInput";
 import { avoidImageDragging } from "../utils/avoid-image-drag";
 import { generateGrid } from "../utils/generate-grid";
+import VerticalDivider from "./VerticalDivider";
+import copySVG from "../svg/copy.svg";
+import saveFileSVG from "../svg/save-file.svg";
+import { generateMapFromGrid } from "../utils/generate-map-from-grid";
 
 interface LedMapperParams {
     image: string | IMAGE_STATE;
@@ -18,16 +22,23 @@ const START_REAL_COUNT = 10;
 
 function LedMapper({image, setImage}: LedMapperParams): ReactElement {
     const [realLedCount, setRealLedCount] = useState(START_REAL_COUNT);
+    const realLedCountReduced = realLedCount - 1;
     const [rows, setRows] = useState(START_ROWS);
     const [collumns, setCollumns] = useState(START_COLLUMNS);
+    const [ledNumToSet, setLedNumToSet] = useState(0);
 
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     // rows and collumns
-    const [gridData, setGridData] = useState<Grid>(generateGrid(START_ROWS, START_COLLUMNS))
+    const [gridData, setGridData] = useState<Grid>(generateGrid(START_ROWS, START_COLLUMNS));
+    const [generatedMap, setGeneratedMap] = useState("");
 
     const imageSizeEquivalentRef = useRef<HTMLDivElement>(null);
     const backgroundImageRef = useRef<HTMLImageElement>(null);
     const mapperFieldRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setGeneratedMap(generateMapFromGrid(gridData));
+    }, gridData);
 
     const guardedSetRows = (newVal: number) => {
         setGridData(generateGrid(newVal, collumns));
@@ -37,6 +48,13 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
     const guardedSetCollumns = (newVal: number) => {
         setGridData(generateGrid(rows, newVal));
         setCollumns(newVal);
+    };
+
+    // TODO add guard to the setRealLedCount that removes bigger counts when decreased
+
+    const guardedSetLedNumToSet = (newVal: number): void => {
+        // only set the new value if its not bigger than the realLedCount - 1 (as indexed started with 0)
+        setLedNumToSet(Math.min(newVal, realLedCount - 1));
     };
 
     // recalc imageSizeEquivalent size
@@ -80,6 +98,7 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     setStateValue={setRealLedCount}
                     guide="Step 2: Set the amount of LEDs your build has"
                 />
+                <VerticalDivider />
                 <NumberInput 
                     labelName="Rows:"
                     stateValue={rows}
@@ -94,6 +113,15 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     guide=""
                     warning={rowsORCallWarning}
                 />
+                <VerticalDivider />
+                <NumberInput 
+                    labelName="LED-Num to set:"
+                    stateValue={ledNumToSet}
+                    setStateValue={setLedNumToSet}
+                    hidePlusMinus={true}
+                    max={realLedCountReduced}
+                    guide="Step 4: Set LEDs on Matrix by clicking pixels"
+                />
             </div>
         </div>
         <div 
@@ -106,6 +134,8 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     setGrid={setGridData}
                     width={dimensions.width}
                     height={dimensions.height}
+                    ledNumToSet={ledNumToSet}
+                    setLedNumToSet={guardedSetLedNumToSet}
                 />
             </div>
             {
@@ -117,6 +147,25 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     onDragStart={avoidImageDragging}
                 />
             }
+        </div>
+        <div className="toolbar">
+            <div>Generated WLED Map: </div>
+            <input 
+                className="mapOutputInputfield"
+                value={generatedMap}
+            />
+            <img 
+                className="copyIcon"
+                src={copySVG} 
+                alt="Copy LED to clipboard"
+                title="Copy WLED ledmap to clipboard"
+            />
+            <img 
+                className="copyIcon"
+                src={saveFileSVG} 
+                alt="Save ledmap.json"
+                title="Download WLED ledmap.json file"
+            />
         </div>
     </div>;
 }
