@@ -61,3 +61,11 @@
     border: none;
     outline: none;
 }
+
+.copiedDone {
+    position: absolute;
+    background-color: black;
+    padding: 2rem;
+    border-radius: 1rem;
+    font-size: 1.5rem;
+}

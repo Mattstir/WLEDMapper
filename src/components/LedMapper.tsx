@@ -11,6 +11,7 @@ import copySVG from "../svg/copy.svg";
 import saveFileSVG from "../svg/save-file.svg";
 import { generateMapFromGrid } from "../utils/generate-map-from-grid";
 import { copyToClipboard } from "../utils/copyToClipboard";
+import { downloadFile } from "../utils/download-file";
 
 interface LedMapperParams {
     image: string | IMAGE_STATE;
@@ -27,6 +28,9 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
     const [rows, setRows] = useState(START_ROWS);
     const [collumns, setCollumns] = useState(START_COLLUMNS);
     const [ledNumToSet, setLedNumToSet] = useState(0);
+    const [copiedDoneStyle, setCopiedDoneStyle] = useState({
+        display: "none"
+    });
 
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     // rows and collumns
@@ -39,7 +43,7 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
 
     useEffect(() => {
         setGeneratedMap(generateMapFromGrid(gridData));
-    }, gridData);
+    }, [gridData]);
 
     const guardedSetRows = (newVal: number) => {
         setGridData(generateGrid(newVal, collumns));
@@ -95,14 +99,23 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
             detailedInfo = "All LEDS are set, you can use the map now!";
         }
         return [info, detailedInfo];
-    }, [gridData]);
+    }, [gridData, realLedCount]);
 
     const copyMapToClipboard = useCallback(() => {
-        copyToClipboard(generatedMap);
+        copyToClipboard(generatedMap, () => {
+            setCopiedDoneStyle({
+                display: "flex"
+            });
+            setTimeout(() => {
+                setCopiedDoneStyle({
+                    display: "none"
+                });
+            }, 1_500);
+        });
     }, [generatedMap]);
 
     const downloadLedMapFile = useCallback(() => {
-        // TODO
+        downloadFile(generatedMap, "ledmap.json");
     }, [generatedMap]);
 
     const gridHasMarkedLeds = gridData.some((row) => row.some(elem => elem.value !== void 0));
@@ -188,6 +201,12 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                 title="Copy WLED ledmap to clipboard"
                 onClick={copyMapToClipboard}
             />
+            <div 
+                className="copiedDone"
+                style={copiedDoneStyle}
+            >
+                ✔ Copied to Clipboard! ✔
+            </div>
             <VerticalDivider />
             <img 
                 className="copyIcon"

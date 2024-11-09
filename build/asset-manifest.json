@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/WLEDMapper/build/static/css/main.816ea244.css",
-    "main.js": "/WLEDMapper/build/static/js/main.95f4824f.js",
+    "main.css": "/WLEDMapper/build/static/css/main.4bc8c8f3.css",
+    "main.js": "/WLEDMapper/build/static/js/main.646403e6.js",
     "static/js/453.600de63e.chunk.js": "/WLEDMapper/build/static/js/453.600de63e.chunk.js",
     "static/media/upload-cloud-icon.svg": "/WLEDMapper/build/static/media/upload-cloud-icon.8c1e42734a55a4a235db53690ccdfc43.svg",
     "static/media/github-mark-white.svg": "/WLEDMapper/build/static/media/github-mark-white.97ed8e7eef60d61ca469881dd6f34511.svg",
@@ -11,12 +11,12 @@
     "static/media/plus.svg": "/WLEDMapper/build/static/media/plus.9a940b663a1c45a7cb46495a8da2496e.svg",
     "static/media/heart.svg": "/WLEDMapper/build/static/media/heart.30ee16c7b00749a062bb9d2a5157e193.svg",
     "static/media/minus.svg": "/WLEDMapper/build/static/media/minus.388e37507ab9925d4c8f393f50c28bdd.svg",
-    "main.816ea244.css.map": "/WLEDMapper/build/static/css/main.816ea244.css.map",
-    "main.95f4824f.js.map": "/WLEDMapper/build/static/js/main.95f4824f.js.map",
+    "main.4bc8c8f3.css.map": "/WLEDMapper/build/static/css/main.4bc8c8f3.css.map",
+    "main.646403e6.js.map": "/WLEDMapper/build/static/js/main.646403e6.js.map",
     "453.600de63e.chunk.js.map": "/WLEDMapper/build/static/js/453.600de63e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.816ea244.css",
-    "static/js/main.95f4824f.js"
+    "static/css/main.4bc8c8f3.css",
+    "static/js/main.646403e6.js"
   ]
 }
