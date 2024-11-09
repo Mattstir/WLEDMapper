@@ -10,4 +10,8 @@ Use: https://mattstir.github.io/WLEDMapper/
 ## Guide
 The tool is designed to be intuitive. Additionally, you can find a [detailed guide](./guide.md) with an example.
 
+
+## Development
+Note: This tools is still in its early stages, so there can be bugs and unpolished.
+
 Colors: https://coolors.co/1d1f21-2c2f33-4ecdc4-f7fff7-ff6b6b
