@@ -1,6 +1,7 @@
-import { ChangeEvent, CSSProperties, EventHandler, MouseEvent, ReactElement, useMemo, useRef } from "react";
+import { CSSProperties, EventHandler, MouseEvent, ReactElement, useMemo } from "react";
 import "./LedGrid.css";
 import { Grid } from "../types/grid";
+import { EmptyLEDStyle } from "../types/empty-led-style";
 
 interface LedGridParams {
     grid: Grid;
@@ -9,9 +10,10 @@ interface LedGridParams {
     setLedNumToSet: (newVal: number) => void;
     width: number;
     height: number;
+    emptyLedColor: EmptyLEDStyle;
 }
 
-function LedGrid({grid, setGrid, height, width, ledNumToSet, setLedNumToSet}: LedGridParams): ReactElement {
+function LedGrid({grid, setGrid, height, width, ledNumToSet, setLedNumToSet, emptyLedColor}: LedGridParams): ReactElement {
     const ledWidthAndHeight = useMemo(() => {
         if(!width || !height) {
             return [1, 1];
@@ -48,10 +50,13 @@ function LedGrid({grid, setGrid, height, width, ledNumToSet, setLedNumToSet}: Le
                     const value = isLED ? gridPoint.value : "";
                     const classes = isLED ? "baseGridPoint ledGridPoint" : "baseGridPoint"
                     const smallerLength = Math.min(ledWidthAndHeight[0], ledWidthAndHeight[1]);
+                    const borderColor = emptyLedColor === EmptyLEDStyle.BRIGHT ? "rgba(255, 255, 255, .6)" : "rgba(0, 0, 0, .6)";
+                    const backgroundColor = emptyLedColor === EmptyLEDStyle.BRIGHT ? "rgba(255, 255, 255, .2)" : "rgba(0, 0, 0, .2)";
                     const style: CSSProperties = {
                         width: ledWidthAndHeight[0],
                         height: ledWidthAndHeight[1],
-                        border: `${smallerLength / 10}px solid rgba(255, 255, 255, .6)`,
+                        border: `${smallerLength / 10}px solid ${borderColor}`,
+                        backgroundColor,
                         borderRadius: `${smallerLength / 10}px`,
                         fontSize: `${ledWidthAndHeight[1] / 2}px`
                     };

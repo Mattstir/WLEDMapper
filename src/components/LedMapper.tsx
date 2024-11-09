@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { EventHandler, ReactElement, SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IMAGE_STATE } from "../types/imageState";
 import "./LedMapper.css";
 import { Grid } from "../types/grid";
@@ -12,6 +12,8 @@ import saveFileSVG from "../svg/save-file.svg";
 import { generateMapFromGrid } from "../utils/generate-map-from-grid";
 import { copyToClipboard } from "../utils/copyToClipboard";
 import { downloadFile } from "../utils/download-file";
+import { EmptyLEDStyle } from "../types/empty-led-style";
+import { detectLedStyleToUse } from "../utils/detect-led-style-to-use";
 
 interface LedMapperParams {
     image: string | IMAGE_STATE;
@@ -28,6 +30,7 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
     const [rows, setRows] = useState(START_ROWS);
     const [collumns, setCollumns] = useState(START_COLLUMNS);
     const [ledNumToSet, setLedNumToSet] = useState(0);
+    const [emptyLedColor, setEmptyLedColor] = useState<EmptyLEDStyle>(EmptyLEDStyle.BRIGHT);
     const [copiedDoneStyle, setCopiedDoneStyle] = useState({
         display: "none"
     });
@@ -89,6 +92,10 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
             height: imageHeight
         });
     }, [image]);
+
+    const backgroundImageOnload = () => {
+        setEmptyLedColor(detectLedStyleToUse(backgroundImageRef));
+    }
 
     const [setLEDInfo, detailedLEDInfo] = useMemo((): [string, string] => {
         const setLedNums = extractLedNums([...gridData]);
@@ -175,12 +182,14 @@ function LedMapper({image, setImage}: LedMapperParams): ReactElement {
                     height={dimensions.height}
                     ledNumToSet={ledNumToSet}
                     setLedNumToSet={guardedSetLedNumToSet}
+                    emptyLedColor={emptyLedColor}
                 />
             </div>
             {
                 image !== IMAGE_STATE.DONT_USE && <img 
                     ref={backgroundImageRef} 
-                    className="backgroundImage" 
+                    className="backgroundImage"
+                    onLoad={backgroundImageOnload}
                     src={image}
                     alt=""
                     onDragStart={avoidImageDragging}
