@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
         <div className="Header">
-            <div className="toolName">WLEDMapper - DON'T use, this tool is WIP</div>
+            <div className="toolName">WLEDMapper</div>
             <a href="https://github.com/Mattstir/WLEDMapper">
                 <img className="githubMarker" src={githubMarker} alt="Go to repository" />
             </a>
